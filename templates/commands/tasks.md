@@ -13,7 +13,7 @@ Given the context provided as an argument, do this:
 2. Load and analyze available design documents:
    - Always read plan.md for tech stack and libraries
    - IF EXISTS: Read data-model.md for entities
-   - IF EXISTS: Read contracts/ for API endpoints  
+   - IF EXISTS: Read contracts/ for API endpoints
    - IF EXISTS: Read research.md for technical decisions
    - IF EXISTS: Read quickstart.md for test scenarios
 
