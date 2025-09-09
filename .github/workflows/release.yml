@@ -103,7 +103,18 @@ jobs:
                   } > "$output_dir/$name.$ext"
                   ;;
                 "md")
-                  echo "$content" > "$output_dir/$name.$ext"
+                  if [ "$agent" = "cascade" ]; then
+                    {
+                      echo "---"
+                      echo "description: $description"
+                      echo "auto_execution_mode: 3"
+                      echo "---"
+                      echo ""
+                      echo "$content"
+                    } > "$output_dir/$name.$ext"
+                  else
+                    echo "$content" > "$output_dir/$name.$ext"
+                  fi
                   ;;
                 "prompt.md")
                   {
@@ -145,7 +156,7 @@ jobs:
         mkdir -p sdd-cascade-package
         cp -r sdd-package-base/* sdd-cascade-package/
         mkdir -p sdd-cascade-package/.windsurf/workflows
-        generate_commands "cascade" "prompt.md" "\$ARGUMENTS" "sdd-cascade-package/.windsurf/workflows"
+        generate_commands "cascade" "md" "\$ARGUMENTS" "sdd-cascade-package/.windsurf/workflows"
         echo "Created Windsurf Cascade package"
         
         # Create archive files for each package
