@@ -126,6 +126,18 @@ jobs:
           echo "⚠️ agent_templates/copilot folder not found"
         fi
         
+        # Create Windsurf Cascade package
+        echo "Creating Windsurf Cascade package..."
+        mkdir -p sdd-cascade-package
+        cp -r sdd-package-base/* sdd-cascade-package/
+        if [ -d "agent_templates/cascade" ]; then
+          mkdir -p sdd-cascade-package/.windsurf
+          cp -r agent_templates/cascade/* sdd-cascade-package/.windsurf/
+          echo "✓ Added Cascade instructions to .windsurf ($(find agent_templates/cascade -type f | wc -l) files)"
+        else
+          echo "⚠️ agent_templates/cascade folder not found"
+        fi
+
         # Create archive files for each package
         echo "Creating archive files..."
         cd sdd-claude-package && zip -r ../spec-kit-template-claude-${{ steps.version.outputs.new_version }}.zip . && cd ..
@@ -134,12 +146,14 @@ jobs:
         
         cd sdd-copilot-package && zip -r ../spec-kit-template-copilot-${{ steps.version.outputs.new_version }}.zip . && cd ..
         
+        cd sdd-cascade-package && zip -r ../spec-kit-template-cascade-${{ steps.version.outputs.new_version }}.zip . && cd ..
+        
         echo ""
         echo "📦 Packages created:"
         echo "Claude: $(ls -lh spec-kit-template-claude-*.zip | awk '{print $5}')"
         echo "Gemini: $(ls -lh spec-kit-template-gemini-*.zip | awk '{print $5}')"
         echo "Copilot: $(ls -lh spec-kit-template-copilot-*.zip | awk '{print $5}')"
-        echo "Copilot: $(ls -lh sdd-template-copilot-*.zip | awk '{print $5}')"
+        echo "Cascade: $(ls -lh spec-kit-template-cascade-*.zip | awk '{print $5}')"
         
     - name: Generate detailed release notes
       run: |
@@ -158,6 +172,7 @@ jobs:
         CLAUDE_COUNT=$(find agent_templates/claude -type f 2>/dev/null | wc -l || echo "0")
         GEMINI_COUNT=$(find agent_templates/gemini -type f 2>/dev/null | wc -l || echo "0")
         COPILOT_COUNT=$(find agent_templates/copilot -type f 2>/dev/null | wc -l || echo "0")
+        CASCADE_COUNT=$(find agent_templates/cascade -type f 2>/dev/null | wc -l || echo "0")
         MEMORY_COUNT=$(find memory -type f 2>/dev/null | wc -l || echo "0")
         SCRIPTS_COUNT=$(find scripts -type f 2>/dev/null | wc -l || echo "0")
         
@@ -170,6 +185,7 @@ jobs:
         - spec-kit-template-copilot-${{ steps.version.outputs.new_version }}.zip
         - spec-kit-template-claude-${{ steps.version.outputs.new_version }}.zip
         - spec-kit-template-gemini-${{ steps.version.outputs.new_version }}.zip  
+        - spec-kit-template-cascade-${{ steps.version.outputs.new_version }}.zip
         
         Changes since $LAST_TAG:
         $COMMITS
@@ -185,6 +201,7 @@ jobs:
           spec-kit-template-copilot-${{ steps.version.outputs.new_version }}.zip \
           spec-kit-template-claude-${{ steps.version.outputs.new_version }}.zip \
           spec-kit-template-gemini-${{ steps.version.outputs.new_version }}.zip \
+          spec-kit-template-cascade-${{ steps.version.outputs.new_version }}.zip \
           --title "Spec Kit Templates - $VERSION_NO_V" \
           --notes-file release_notes.md
       env:

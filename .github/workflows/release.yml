@@ -144,8 +144,8 @@ jobs:
         # Create Windsurf Cascade package
         mkdir -p sdd-cascade-package
         cp -r sdd-package-base/* sdd-cascade-package/
-        mkdir -p sdd-cascade-package/.windsurf/prompts
-        generate_commands "cascade" "prompt.md" "\$ARGUMENTS" "sdd-cascade-package/.windsurf/prompts"
+        mkdir -p sdd-cascade-package/.windsurf/workflows
+        generate_commands "cascade" "prompt.md" "\$ARGUMENTS" "sdd-cascade-package/.windsurf/workflows"
         echo "Created Windsurf Cascade package"
         
         # Create archive files for each package
